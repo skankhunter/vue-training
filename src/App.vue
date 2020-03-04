@@ -1,32 +1,68 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-navigation-drawer app temporary
+    v-model="drawer">
+      <v-list>
+        <v-list-item
+                v-for="link in links"
+                :key="link.title"
+                @click="()=>{}"
+                :to="link.url"
+        >
+          <v-list-item-icon>
+            <v-icon>mdi-{{link.icon}}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title v-text="link.title"></v-list-item-title>
+          </v-list-item-content>
+
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-card flat>
+      <v-toolbar dark color="primary">
+        <v-app-bar-nav-icon @click="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
+
+        <v-toolbar-title>Keker</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn v-for="link in links"
+                 :key="link.title"
+                 :to="link.url"
+                 text>
+            <v-icon left>mdi-{{link.icon}}</v-icon> {{link.title}}
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+    </v-card>
+
+    <!-- Sizes your content based upon application components -->
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
+export default {
+  name: 'App',
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+  components: {
+  },
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+  data: () => ({
+    drawer: false,
+    links: [
+            {title: 'Login', icon: 'login', url: '/login'},
+            {title: 'Registration', icon: 'face', url: '/registration'},
+            {title: 'Orders', icon: 'bookmark-multiple', url: '/orders'},
+            {title: 'New ad', icon: 'note-text', url: '/new'},
+            {title: 'My ads', icon: 'clipboard-list-outline', url: '/list'}]
+  }),
+};
+</script>
