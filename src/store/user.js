@@ -42,8 +42,14 @@ export default {
 
                 throw e
             }
+        },
+        autoLoginUser({commit}, payload) {
+            commit('setUser', new User(payload.uid))
+        },
+        logoutUser({commit}) {
+            firebase.auth().signOut();
+            commit('setUser', null)
         }
-
     },
     mutations: {
         setUser(state, payload) {
@@ -53,6 +59,9 @@ export default {
     getters: {
         user(state) {
             return state.user
+        },
+        isUserLoggedIn(state) {
+            return state.user !== null
         }
     }
 }
