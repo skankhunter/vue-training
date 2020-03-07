@@ -6,7 +6,7 @@
                     <v-carousel
                             cycle
                             show-arrows-on-hover>
-                        <v-carousel-item v-for="ad in ads" :key="ad.id" :src="ad.imgSrc">
+                        <v-carousel-item v-for="ad in promoAds" :key="ad.id" :src="ad.imgSrc">
                             <div class="carousel-link">
                                 <v-btn class="error" :to="'/ad/' + ad.id">{{ad.title}}</v-btn>
                             </div>
@@ -51,30 +51,16 @@
     export default {
         name: "Home",
         data: () => ({
-            ads: [
-                {
-                    title: 'First ad',
-                    description: 'salam aleikum',
-                    promo: false,
-                    imgSrc: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
-                    id: '123'
-                },
-                {
-                    title: 'Second ad',
-                    description: 'salam aleikum',
-                    promo: true,
-                    imgSrc: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
-                    id: '234'
-                },
-                {
-                    title: 'Third ad',
-                    description: 'salam aleikum',
-                    promo: true,
-                    imgSrc: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
-                    id: '432'
-                }
-            ]
-        })
+
+        }),
+        computed: {
+            promoAds() {
+                return this.$store.getters.promoAds
+            },
+            ads() {
+                return this.$store.getters.ads
+            }
+        }
     }
 </script>
 

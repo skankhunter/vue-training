@@ -19,6 +19,7 @@ const routes = [
     {
         path: '/ad/:id',
         name: 'ad',
+        props: true,
         component: Ad
     },
     {

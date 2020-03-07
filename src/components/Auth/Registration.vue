@@ -1,25 +1,18 @@
 <template>
     <v-container
             class="fill-height"
-            fluid
-    >
+            fluid>
         <v-row
                 align="center"
-                justify="center"
-        >
-            <v-col
-                    cols="12"
-                    sm="8"
-                    md="6"
-            >
+                justify="center">
+            <v-col cols="12"
+                   sm="8"
+                   md="6">
                 <v-card class="elevation-12">
-                    <v-toolbar
-                            color="primary"
-                            dark
-                            flat
-                    >
+                    <v-toolbar color="primary"
+                               dark
+                               flat>
                         <v-toolbar-title>Registration form</v-toolbar-title>
-
                     </v-toolbar>
                     <v-card-text>
                         <v-form ref="form"
@@ -31,8 +24,7 @@
                                     prepend-icon="mdi-account"
                                     type="email"
                                     :rules="emailRules"
-                                    v-model="email"
-                            />
+                                    v-model="email"/>
 
                             <v-text-field
                                     id="password"
@@ -42,8 +34,7 @@
                                     type="password"
                                     :counter="6"
                                     :rules="passwordRules"
-                                    v-model="password"
-                            />
+                                    v-model="password"/>
 
                             <v-text-field
                                     id="confirm-password"
@@ -53,15 +44,15 @@
                                     type="password"
                                     :counter="6"
                                     :rules="confirmPasswordRules"
-                                    v-model="confirmPassword"
-                            />
+                                    v-model="confirmPassword"/>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
-                        <v-spacer />
+                        <v-spacer/>
                         <v-btn color="primary"
                                @click="onSubmit()"
-                               :disabled="!valid">
+                               :loading="loading"
+                               :disabled="!valid || loading">
                             Create
                         </v-btn>
                     </v-card-actions>
@@ -103,15 +94,24 @@
                 }
 
                 return rules
+            },
+            loading() {
+                return this.$store.getters.loading
             }
         },
         methods: {
             onSubmit() {
                 if (this.$refs.form.validate()) {
-                    // const user = {
-                    //     email: this.email,
-                    //     password: this.password
-                    // }
+                    const user = {
+                        email: this.email,
+                        password: this.password
+                    };
+
+                    this.$store.dispatch('registerUser', user)
+                        .then(() => {
+                            this.$router.push('/')
+                        })
+                        .catch(() => {})
                 }
             }
         }
