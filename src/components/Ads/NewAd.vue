@@ -48,6 +48,7 @@
                     <v-flex xs12>
                         <v-spacer/>
                         <v-btn class="success"
+                               :loading="loading"
                                @click="createAd"
                                :disabled="!valid">
                             Create ad
@@ -68,6 +69,11 @@
             promo: false,
             valid: false
         }),
+        computed: {
+            loading() {
+                return this.$store.getters.loading
+            }
+        },
         methods: {
             createAd() {
                 if (this.$refs.form.validate()) {
@@ -79,6 +85,10 @@
                     };
 
                     this.$store.dispatch('createAd', ad)
+                        .then(() => {
+                            this.$router.push('/list')
+                        })
+                        .catch(() => {})
                 }
             }
         }
