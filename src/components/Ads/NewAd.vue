@@ -27,15 +27,21 @@
                 <v-layout row class="mb-3">
                     <v-flex xs12>
                         <v-btn color="blue-grey"
-                               class="ma-2 white--text">
+                               class="ma-2 white--text"
+                               @click="triggerUpload">
                             Upload
                             <v-icon right dark>mdi-cloud-upload</v-icon>
                         </v-btn>
+                        <input ref="fileInput"
+                               type="file"
+                               style="display: none"
+                               accept="image/*"
+                        @change="onFileChange">
                     </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex xs12>
-                        <img src="" height="100px"/>
+                        <img :src="imgSrc" height="100px" v-if="imgSrc"/>
                     </v-flex>
                 </v-layout>
                 <v-layout row>
@@ -50,7 +56,7 @@
                         <v-btn class="success"
                                :loading="loading"
                                @click="createAd"
-                               :disabled="!valid">
+                               :disabled="!valid || !image || loading">
                             Create ad
                         </v-btn>
                     </v-flex>
@@ -67,7 +73,9 @@
             title: '',
             description: '',
             promo: false,
-            valid: false
+            valid: false,
+            image: null,
+            imgSrc: ''
         }),
         computed: {
             loading() {
@@ -76,20 +84,35 @@
         },
         methods: {
             createAd() {
-                if (this.$refs.form.validate()) {
+                if (this.$refs.form.validate() && this.image) {
                     const ad = {
                         title: this.title,
                         description: this.description,
                         promo: this.promo,
-                        imgSrc: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1024px-Unofficial_JavaScript_logo_2.svg.png'
+                        image: this.image
                     };
 
                     this.$store.dispatch('createAd', ad)
                         .then(() => {
                             this.$router.push('/list')
                         })
-                        .catch(() => {})
+                        .catch(() => {
+                        })
                 }
+            },
+            triggerUpload() {
+                this.$refs.fileInput.click()
+            },
+            onFileChange(event) {
+                const img = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    this.imgSrc = reader.result
+                };
+                reader.readAsDataURL(img);
+
+                this.image = img
             }
         }
     }
