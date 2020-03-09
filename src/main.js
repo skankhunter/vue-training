@@ -3,9 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-import * as firebase from 'firebase'
 
-Vue.config.productionTip = false
+import * as firebase from 'firebase'
+import BuyModal from "./components/Shared/BuyModal";
+
+Vue.config.productionTip = false;
+Vue.component('app-buy-modal', BuyModal);
 
 new Vue({
   router,
@@ -31,4 +34,4 @@ new Vue({
     })
     this.$store.dispatch('fetchAds')
   }
-}).$mount('#app')
+}).$mount('#app');

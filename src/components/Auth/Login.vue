@@ -1,23 +1,19 @@
 <template>
     <v-container
             class="fill-height"
-            fluid
-    >
+            fluid>
         <v-row
                 align="center"
-                justify="center"
-        >
+                justify="center">
             <v-col
                     cols="12"
                     sm="8"
-                    md="6"
-            >
+                    md="6">
                 <v-card class="elevation-12">
                     <v-toolbar
                             color="primary"
                             dark
-                            flat
-                    >
+                            flat>
                         <v-toolbar-title>Login form</v-toolbar-title>
 
                     </v-toolbar>
@@ -31,8 +27,7 @@
                                     prepend-icon="mdi-account"
                                     type="email"
                                     :rules="emailRules"
-                                    v-model="email"
-                            />
+                                    v-model="email"/>
 
                             <v-text-field
                                     id="password"
@@ -42,8 +37,7 @@
                                     type="password"
                                     :counter="6"
                                     :rules="passwordRules"
-                                    v-model="password"
-                            />
+                                    v-model="password"/>
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
