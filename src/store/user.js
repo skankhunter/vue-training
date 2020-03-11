@@ -1,8 +1,9 @@
 import * as firebase from 'firebase'
 
 class User {
-    constructor(id) {
+    constructor(id, name) {
         this.id = id;
+        this.name = name;
     }
 }
 
@@ -11,14 +12,15 @@ export default {
         user: null
     },
     actions: {
-        async registerUser({commit}, {email, password}) {
+        async registerUser({commit}, {email, password, name}) {
             commit('clearError');
             commit('setLoading', true);
 
             try {
-                const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const {user} = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                await firebase.database().ref(`/profiles/${user.uid}`).set({email, name});
 
-                commit('setUser', new User(user.uid));
+                commit('setUser', new User(user.uid, name));
                 commit('setLoading', false);
             } catch (e) {
                 commit('setLoading', false);
@@ -32,9 +34,9 @@ export default {
             commit('setLoading', true);
 
             try {
-                const user = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const {user} = await firebase.auth().signInWithEmailAndPassword(email, password);
 
-                commit('setUser', new User(user.user.uid));
+                commit('setUser', new User(user.uid));
                 commit('setLoading', false);
             } catch (e) {
                 commit('setLoading', false);
@@ -43,9 +45,11 @@ export default {
                 throw e
             }
         },
-        autoLoginUser({commit}, payload) {
-            console
-            commit('setUser', new User(payload.uid))
+       async autoLoginUser({commit}, user) {
+           const fbValue = await firebase.database().ref(`/profiles/${user.uid}`).once('value');
+           const userDB = fbValue.val();
+
+           commit('setUser', new User(user.uid, userDB.name))
         },
         logoutUser({commit}) {
             firebase.auth().signOut();

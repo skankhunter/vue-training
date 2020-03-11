@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-
 import * as firebase from 'firebase'
 import BuyModal from "./components/Shared/BuyModal";
 
@@ -31,7 +30,7 @@ new Vue({
       if (user) {
         this.$store.dispatch('autoLoginUser', user)
       }
-    })
+    });
     this.$store.dispatch('fetchAds')
   }
 }).$mount('#app');

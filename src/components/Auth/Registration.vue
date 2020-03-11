@@ -25,6 +25,13 @@
                                     type="email"
                                     :rules="emailRules"
                                     v-model="email"/>
+                            <v-text-field
+                                    label="Name"
+                                    name="name"
+                                    prepend-icon="mdi-baby-face"
+                                    type="text"
+                                    :rules="nameRules"
+                                    v-model="name"/>
 
                             <v-text-field
                                     id="password"
@@ -68,8 +75,13 @@
         data: () => ({
             email: '',
             password: '',
+            name: '',
             confirmPassword: '',
             valid: false,
+            nameRules: [
+                v => !!v || 'Name is required',
+                v => (v && v.length <= 30) || 'Name is too long',
+            ],
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -104,7 +116,8 @@
                 if (this.$refs.form.validate()) {
                     const user = {
                         email: this.email,
-                        password: this.password
+                        password: this.password,
+                        name: this.name
                     };
 
                     this.$store.dispatch('registerUser', user)
