@@ -101,7 +101,8 @@
                     return [
                         {title: 'Orders', icon: 'bookmark-multiple', url: '/orders'},
                         {title: 'New ad', icon: 'note-text', url: '/new'},
-                        {title: 'My ads', icon: 'clipboard-list-outline', url: '/list'}
+                        {title: 'My ads', icon: 'clipboard-list-outline', url: '/list'},
+                        {title: 'Profile', icon: 'account-circle-outline', url: '/profile'}
                     ];
                 }
 

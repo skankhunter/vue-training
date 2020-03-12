@@ -8,6 +8,7 @@ import NewAd from '@/components/Ads/NewAd'
 import Login from '@/components/Auth/Login'
 import Registration from '@/components/Auth/Registration'
 import Orders from '@/components/User/Orders'
+import Profile from "../components/User/Profile";
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,12 @@ const routes = [
         component: Registration
     },
     {
+        path: '/profile',
+        name: 'profile',
+        component: Profile,
+        beforeEnter: AuthGuard
+    },
+    {
         path: '/orders',
         name: 'orders',
         component: Orders,
@@ -57,6 +64,6 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
 export default router

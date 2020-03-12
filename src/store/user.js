@@ -1,9 +1,12 @@
 import * as firebase from 'firebase'
 
 class User {
-    constructor(id, name) {
+    constructor(id, {name, about, stack, imgSrc}) {
         this.id = id;
         this.name = name;
+        this.about = about;
+        this.stack = stack;
+        this.imgSrc = imgSrc;
     }
 }
 
@@ -18,7 +21,7 @@ export default {
 
             try {
                 const {user} = await firebase.auth().createUserWithEmailAndPassword(email, password);
-                await firebase.database().ref(`/profiles/${user.uid}`).set({email, name});
+                await firebase.database().ref(`profiles/${user.uid}`).set({email, name});
 
                 commit('setUser', new User(user.uid, name));
                 commit('setLoading', false);
@@ -35,8 +38,10 @@ export default {
 
             try {
                 const {user} = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const fbValue = await firebase.database().ref(`profiles/${user.uid}`).once('value');
+                const userDB = fbValue.val();
 
-                commit('setUser', new User(user.uid));
+                commit('setUser', new User(user.uid, userDB));
                 commit('setLoading', false);
             } catch (e) {
                 commit('setLoading', false);
@@ -46,14 +51,37 @@ export default {
             }
         },
        async autoLoginUser({commit}, user) {
-           const fbValue = await firebase.database().ref(`/profiles/${user.uid}`).once('value');
+           const fbValue = await firebase.database().ref(`profiles/${user.uid}`).once('value');
            const userDB = fbValue.val();
 
-           commit('setUser', new User(user.uid, userDB.name))
+           commit('setUser', new User(user.uid, userDB))
         },
         logoutUser({commit}) {
             firebase.auth().signOut();
             commit('setUser', null)
+        },
+        async updateProfile({commit, getters}, {name, about, stack, image}) {
+            commit('clearError');
+            commit('setLoading', true);
+
+            try {
+                const imageExt = image.name.slice(image.name.lastIndexOf('.'));
+
+                const fileData = await firebase.storage().ref(`profiles/${getters.user.id}.${imageExt}`).put(image);
+                const imgSrc = await firebase.storage().ref().child(fileData.ref.fullPath).getDownloadURL();
+
+                await firebase.database().ref('profiles').child(getters.user.id).update({name, about, stack, imgSrc});
+
+                commit('setUser', new User(getters.user.id, {name, about, stack, imgSrc}));
+
+                commit('setLoading', false);
+            } catch (e) {
+                commit('setLoading', false);
+                commit('setError', e.message);
+
+                throw e
+            }
+
         }
     },
     mutations: {

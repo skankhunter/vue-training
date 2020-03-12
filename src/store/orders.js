@@ -41,11 +41,14 @@ export default {
                 const fbValue = await firebase.database().ref(`/users/${getters.user.id}/orders`).once('value');
                 const orders = fbValue.val();
 
-                Object.keys(orders).forEach(key => {
-                    const order = orders[key];
+                if (orders) {
+                    Object.keys(orders).forEach(key => {
+                        const order = orders[key];
 
-                    resultOrders.push(new Order(order.name, order.phone, order.adId, order.done, key))
-                });
+                        resultOrders.push(new Order(order.name, order.phone, order.adId, order.done, key))
+                    });
+                }
+
 
                 commit('loadOrders', resultOrders);
                 commit('setLoading', false);
