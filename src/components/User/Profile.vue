@@ -18,6 +18,13 @@
                         :disabled="viewMode"
                         :rules="[]"
                         v-model="stack"/>
+                <v-select
+                        v-model="team"
+                        :items="teams"
+                        :disabled="viewMode"
+                        :append-icon="'mdi-plus'"
+                        label="My team"
+                />
                 <v-textarea
                     label="About me"
                     name="about"
@@ -27,7 +34,7 @@
                     v-model="about"/>
             </v-flex>
             <v-flex xs6 class="pt-5 text-right">
-                <img :src="imgSrc" class="profile__avatar" v-if="imgSrc"/>
+                <img :src="imgSrc" class="profile__avatar"/>
             </v-flex>
         </v-layout>
         <v-layout class="mb-3">
@@ -62,7 +69,7 @@
                 <v-btn class="success ma-2"
                        :loading="loading"
                        @click="updateProfile"
-                       :disabled="!image || loading">
+                       :disabled="viewMode || loading">
                     Save
                 </v-btn>
             </v-flex>
@@ -78,33 +85,38 @@
                 name: this.$store.getters.user.name || '',
                 about: this.$store.getters.user.about || '',
                 stack: this.$store.getters.user.stack || '',
+                team: this.$store.getters.user.team || '',
                 viewMode: true,
                 image: null,
-                imgSrc: this.$store.getters.user.imgSrc || ''
-        }
+                imgSrc: this.$store.getters.user.imgSrc || 'assets/avatar.png'
+            }
+        },
+        created() {
+          this.$store.dispatch('fetchTeams');
         },
         computed: {
             loading() {
                 return this.$store.getters.loading
+            },
+            teams() {
+                return this.$store.getters.teams
             }
         },
         methods: {
             updateProfile() {
-                if (this.image) {
-                    const profile = {
-                        name: this.name,
-                        about: this.about,
-                        stack: this.stack,
-                        image: this.image,
-                    };
+                const profile = {
+                    name: this.name,
+                    about: this.about,
+                    stack: this.stack,
+                    team: this.team,
+                    image: this.image,
+                };
 
-                    this.$store.dispatch('updateProfile', profile)
-                        .then(() => {
-                            this.$router.push('/')
-                        })
-                        .catch(() => {
-                        })
-                }
+                this.$store.dispatch('updateProfile', profile)
+                    .then(() => {
+                        this.$router.push('/')
+                    })
+                    .catch(() => {})
             },
             triggerUpload() {
                 this.$refs.fileInput.click()
@@ -126,7 +138,7 @@
 
 <style scoped>
     .profile__avatar {
-        max-height: 200px;
+        max-height: 250px;
         border-radius: 10%;
         box-shadow: -2px 6px 26px -8px rgba(0,0,0,0.75);
     }
