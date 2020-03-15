@@ -4,8 +4,9 @@ import ads from './ads'
 import user from './user'
 import shared from './shared'
 import orders from "./orders";
+import profiles from "./profiles";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     ads,
     user,
     shared,
-    orders
+    orders,
+    profiles
   }
 })

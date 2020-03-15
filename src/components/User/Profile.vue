@@ -1,105 +1,111 @@
 <template>
     <v-container>
-        <v-layout >
-            <v-flex xs6  class="text-center pt-5">
-                <h1 class="text--secondary mb-3">Profile</h1>
-                <v-text-field
-                        label="Name"
-                        name="name"
-                        type="text"
-                        :disabled="viewMode"
-                        :rules="[]"
-                        v-model="name"/>
-                <v-text-field
-                        label="My stack"
-                        name="stack"
-                        placeholder="For separation use ,"
-                        type="text"
-                        :disabled="viewMode"
-                        :rules="[]"
-                        v-model="stack"/>
-                <v-select
-                        v-model="team"
-                        :items="teams"
-                        :disabled="viewMode"
-                        :append-icon="'mdi-plus'"
-                        label="My team"
-                />
-                <v-textarea
-                    label="About me"
-                    name="about"
-                    type="text"
-                    :disabled="viewMode"
-                    :rules="[]"
-                    v-model="about"/>
-            </v-flex>
-            <v-flex xs6 class="pt-5 text-right">
-                <img :src="imgSrc" class="profile__avatar"/>
-            </v-flex>
+        <v-layout xs12 class="text-center pt-5" v-if="loading">
+            <v-progress-circular indeterminate
+                                 color="purple" />
         </v-layout>
-        <v-layout class="mb-3">
-            <v-flex xs12>
-                <v-btn color="blue-grey"
-                       class="ma-2 white--text"
-                       :disabled="viewMode"
-                       @click="triggerUpload">
-                    Upload
-                    <v-icon right dark>mdi-cloud-upload</v-icon>
-                </v-btn>
-                <input ref="fileInput"
-                       type="file"
-                       style="display: none"
-                       accept="image/*"
-                       @change="onFileChange">
-            </v-flex>
+        <template v-else>
+            <v-layout>
+                <v-flex xs6 class="text-center pt-5">
+                    <h1 class="text--secondary mb-3">Profile</h1>
+                    <v-text-field label="Name"
+                                  name="name"
+                                  type="text"
+                                  :disabled="viewMode"
+                                  :rules="[]"
+                                  v-model="name"/>
+                    <v-text-field label="Stack"
+                                  name="stack"
+                                  placeholder="For separation use ,"
+                                  type="text"
+                                  :disabled="viewMode"
+                                  :rules="[]"
+                                  v-model="stack"/>
+                    <v-select v-model="team"
+                              :items="teams"
+                              :disabled="viewMode"
+                              :append-icon="'mdi-plus'"
+                              label="Team"/>
+                    <v-select v-model="position"
+                              :items="positions"
+                              multiple
+                              :disabled="viewMode"
+                              :append-icon="'mdi-plus'"
+                              label="Position"/>
+                    <v-textarea label="About me"
+                                name="about"
+                                type="text"
+                                :disabled="viewMode"
+                                :rules="[]"
+                                v-model="about"/>
+                </v-flex>
+                <v-flex xs6 class="pt-5 text-right">
+                    <img :src="imgSrc" class="profile__avatar"/>
+                </v-flex>
+            </v-layout>
+            <v-layout class="mb-3">
+                <v-flex xs12>
+                    <v-btn color="blue-grey"
+                           class="ma-2 white--text"
+                           :disabled="viewMode"
+                           @click="triggerUpload">
+                        Upload
+                        <v-icon right dark>mdi-cloud-upload</v-icon>
+                    </v-btn>
+                    <input ref="fileInput"
+                           type="file"
+                           style="display: none"
+                           accept="image/*"
+                           @change="onFileChange">
+                </v-flex>
+            </v-layout>
+            <v-layout row>
+                <v-flex xs12>
+                    <v-spacer/>
+                    <v-btn class="light-blue darken-3 white--text ma-2"
+                           text
+                           :loading="loading"
+                           @click="viewMode = !viewMode">
+                        Edit
+                    </v-btn>
+                    <v-btn class="success ma-2"
+                           :loading="loading"
+                           @click="updateProfile"
+                           :disabled="viewMode || loading">
+                        Save
+                    </v-btn>
+                </v-flex>
+            </v-layout>
+        </template>
 
-        </v-layout>
-        <v-layout >
-
-        </v-layout>
-        <v-layout row>
-            <v-flex xs12>
-                <v-spacer/>
-                <v-btn class="light-blue darken-3 white--text ma-2"
-                       text
-                       :loading="loading"
-                       @click="viewMode = !viewMode">
-                    Edit
-                </v-btn>
-                <v-btn class="success ma-2"
-                       :loading="loading"
-                       @click="updateProfile"
-                       :disabled="viewMode || loading">
-                    Save
-                </v-btn>
-            </v-flex>
-        </v-layout>
     </v-container>
 </template>
 
 <script>
+    import {positions, teams} from "../../constants"
     export default {
         name: "Profile",
-        data () {
+        data() {
             return {
                 name: this.$store.getters.user.name || '',
                 about: this.$store.getters.user.about || '',
                 stack: this.$store.getters.user.stack || '',
                 team: this.$store.getters.user.team || '',
+                position: this.$store.getters.user.position || '',
                 viewMode: true,
                 image: null,
                 imgSrc: this.$store.getters.user.imgSrc || 'assets/avatar.png'
             }
-        },
-        created() {
-          this.$store.dispatch('fetchTeams');
         },
         computed: {
             loading() {
                 return this.$store.getters.loading
             },
             teams() {
-                return this.$store.getters.teams
+                return teams
+            },
+            positions() {
+                return positions
             }
         },
         methods: {
@@ -109,6 +115,7 @@
                     about: this.about,
                     stack: this.stack,
                     team: this.team,
+                    position: this.position,
                     image: this.image,
                 };
 
@@ -140,6 +147,6 @@
     .profile__avatar {
         max-height: 250px;
         border-radius: 10%;
-        box-shadow: -2px 6px 26px -8px rgba(0,0,0,0.75);
+        box-shadow: -2px 6px 26px -8px rgba(0, 0, 0, 0.75);
     }
 </style>
