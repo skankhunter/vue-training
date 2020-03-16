@@ -1,11 +1,12 @@
 import * as firebase from 'firebase'
 
 class User {
-    constructor(id, {name, about, stack, team, position, imgSrc}) {
+    constructor(id, {name, about, stack, team, position, startDate, imgSrc}) {
         this.id = id;
         this.name = name;
         this.about = about;
         this.team = team;
+        this.startDate = startDate;
         this.position = position;
         this.stack = stack;
         this.imgSrc = imgSrc;
@@ -62,7 +63,7 @@ export default {
             firebase.auth().signOut();
             commit('setUser', null)
         },
-        async updateProfile({commit, getters}, {name, about, stack, team, position, image}) {
+        async updateProfile({commit, getters}, {name, about, stack, team, position, startDate, image}) {
             commit('clearError');
             commit('setLoading', true);
             let imgSrc = getters.user.imgSrc ?  getters.user.imgSrc : null;
@@ -75,9 +76,9 @@ export default {
                     imgSrc = await firebase.storage().ref().child(fileData.ref.fullPath).getDownloadURL();
                 }
 
-                await firebase.database().ref('profiles').child(getters.user.id).update({name, about, stack, team, position, imgSrc});
+                await firebase.database().ref('profiles').child(getters.user.id).update({name, about, stack, team, position, startDate, imgSrc});
 
-                commit('setUser', new User(getters.user.id, {name, about, stack, team, position, imgSrc}));
+                commit('setUser', new User(getters.user.id, {name, about, stack, team, position, startDate, imgSrc}));
 
                 commit('setLoading', false);
             } catch (e) {

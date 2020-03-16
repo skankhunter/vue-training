@@ -12,8 +12,9 @@
                         tile
                         v-for="profile of profiles"
                         :key="profile.name">
-                    <v-img height="100%"
-                           src="https://cdn.vuetifyjs.com/images/cards/server-room.jpg">
+                    <v-img class="profiles__team-img"
+                           contain
+                           :src="team(profile.team)">
                         <v-row align="end"
                                class="fill-height">
                             <v-col align-self="start"
@@ -31,7 +32,7 @@
                                              dark>
                                     <v-list-item-content>
                                         <v-list-item-title class="title">{{profile.name}}</v-list-item-title>
-                                        <v-list-item-subtitle>{{profile.position.join(', ')}}</v-list-item-subtitle>
+                                        <v-list-item-subtitle class="profiles__position">{{profile.position.join(', ')}}</v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-col>
@@ -47,6 +48,9 @@
     export default {
         name: "Profiles",
         data: () => ({}),
+        created() {
+            this.$store.dispatch('fetchProfiles')
+        },
         computed: {
             loading() {
                 return this.$store.getters.loading
@@ -55,13 +59,32 @@
                 return this.$store.getters.profiles
             }
         },
-        created() {
-            this.$store.dispatch('fetchProfiles')
+        methods: {
+            team(team) {
+                switch (team) {
+                    case 'RSoft':
+                        return '/assets/rsoft.png';
+                    default:
+                        return '/assets/tallink.jpg'
+                }
+            }
         }
     }
 
 </script>
 
 <style scoped>
+    .profiles__team-img {
+        height: 100%;
+        max-height: 250px;
+        min-width: 400px;
+    }
 
+    .title {
+        color: black;
+    }
+
+    .profiles__position {
+        color: black !important;
+    }
 </style>

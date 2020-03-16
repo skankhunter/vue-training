@@ -38,6 +38,31 @@
                                 :disabled="viewMode"
                                 :rules="[]"
                                 v-model="about"/>
+                    <v-menu v-model="dateMenu"
+                            :close-on-content-click="false"
+                            :nudge-right="140"
+                            :disabled="viewMode"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px">
+                        <template v-slot:activator="{ on }">
+                            <v-text-field
+                                    v-model="startDate"
+                                    :disabled="viewMode"
+                                    label="I'm with Smartbics since"
+                                    prepend-icon="mdi-calendar-range"
+                                    readonly
+                                    v-on="on"
+                            ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="startDate"
+                                       :first-day-of-week="1"
+                                       :disabled="viewMode"
+                                       @input="dateMenu = false"/>
+                    </v-menu>
+                </v-flex>
+                <v-flex xs6>
+
                 </v-flex>
                 <v-flex xs6 class="pt-5 text-right">
                     <img :src="imgSrc" class="profile__avatar"/>
@@ -92,6 +117,8 @@
                 stack: this.$store.getters.user.stack || '',
                 team: this.$store.getters.user.team || '',
                 position: this.$store.getters.user.position || '',
+                startDate: this.$store.getters.user.startDate || new Date().toISOString().substr(0, 10),
+                dateMenu: false,
                 viewMode: true,
                 image: null,
                 imgSrc: this.$store.getters.user.imgSrc || 'assets/avatar.png'
@@ -116,6 +143,7 @@
                     stack: this.stack,
                     team: this.team,
                     position: this.position,
+                    startDate: this.startDate,
                     image: this.image,
                 };
 
