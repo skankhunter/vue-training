@@ -9,7 +9,6 @@ export const positions = [
 
 export const teams = [
     "RSoft",
-    "Bora",
-    "Oswald",
-    "Phoenix"
+    "Tallink",
+    "Omniva"
 ];

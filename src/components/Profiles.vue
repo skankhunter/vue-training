@@ -7,38 +7,20 @@
                         color="purple"/>
             </v-flex>
             <v-row dense xs12 sm6 offset-sm-3 v-else>
-                <v-card class="mx-auto mt-5"
-                        max-width="434"
-                        tile
-                        v-for="profile of profiles"
-                        :key="profile.name">
-                    <v-img class="profiles__team-img"
-                           contain
-                           :src="team(profile.team)">
-                        <v-row align="end"
-                               class="fill-height">
-                            <v-col align-self="start"
-                                   class="pa-0"
-                                   cols="12">
-                                <v-avatar class="profile"
-                                          color="grey"
-                                          size="164"
-                                          tile>
-                                    <v-img :src="profile.imgSrc" />
-                                </v-avatar>
-                            </v-col>
-                            <v-col class="py-0">
-                                <v-list-item color="rgba(0, 0, 0, .4)"
-                                             dark>
-                                    <v-list-item-content>
-                                        <v-list-item-title class="title">{{profile.name}}</v-list-item-title>
-                                        <v-list-item-subtitle class="profiles__position">{{profile.position.join(', ')}}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </v-col>
-                        </v-row>
-                    </v-img>
-                </v-card>
+                <v-dialog v-model="dialog" max-width="500">
+                    <template v-slot:activator="{ on }">
+                        <v-card class="mx-auto mt-5"
+                                max-width="434"
+                                tile
+                                v-on="on"
+                                @click="currentProfile = profile"
+                                v-for="profile of profiles"
+                                :key="profile.name">
+                            <app-card-profile :profile="profile"/>
+                        </v-card>
+                    </template>
+                    <app-card-profile-modal :profile="currentProfile" :closeDialog="closeDialog"/>
+                </v-dialog>
             </v-row>
         </v-layout>
     </v-container>
@@ -47,7 +29,10 @@
 <script>
     export default {
         name: "Profiles",
-        data: () => ({}),
+        data: () => ({
+            dialog: false,
+            currentProfile: null
+        }),
         created() {
             this.$store.dispatch('fetchProfiles')
         },
@@ -60,13 +45,9 @@
             }
         },
         methods: {
-            team(team) {
-                switch (team) {
-                    case 'RSoft':
-                        return '/assets/rsoft.png';
-                    default:
-                        return '/assets/tallink.jpg'
-                }
+            closeDialog() {
+                this.dialog = false;
+                this.currentProfile = null;
             }
         }
     }
@@ -74,17 +55,5 @@
 </script>
 
 <style scoped>
-    .profiles__team-img {
-        height: 100%;
-        max-height: 250px;
-        min-width: 400px;
-    }
 
-    .title {
-        color: black;
-    }
-
-    .profiles__position {
-        color: black !important;
-    }
 </style>

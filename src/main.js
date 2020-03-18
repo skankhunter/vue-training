@@ -5,9 +5,13 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import * as firebase from 'firebase'
 import BuyModal from "./components/Shared/BuyModal";
+import CardProfile from './components/User/CardProfile'
+import CardProfileModal from './components/User/CardProfileModal'
 
 Vue.config.productionTip = false;
 Vue.component('app-buy-modal', BuyModal);
+Vue.component('app-card-profile', CardProfile);
+Vue.component('app-card-profile-modal', CardProfileModal);
 
 new Vue({
   router,

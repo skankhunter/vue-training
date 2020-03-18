@@ -17,7 +17,7 @@
         </v-container>
         <v-container grid-list-lg>
             <v-layout wrap>
-                <v-flex xs12
+                <v-flex xs6
                         sm6
                         md4
                         v-for="ad in ads"
