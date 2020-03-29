@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AuthGuard from './auth-guard'
-import Home from '@/components/Home'
+// import Home from '@/components/Home'
 import Ad from '@/components/Ads/Ad'
 import AdList from '@/components/Ads/AdList'
 import NewAd from '@/components/Ads/NewAd'
@@ -10,6 +10,7 @@ import Registration from '@/components/Auth/Registration'
 import Orders from '@/components/User/Orders'
 import Profile from "../components/User/Profile";
 import Profiles from "../components/Profiles";
+import HomeS from "../components/HomeS";
 
 Vue.use(VueRouter)
 
@@ -17,7 +18,7 @@ const routes = [
     {
       path: '',
         name: 'home',
-        component: Home
+        component: HomeS,
     },
     {
         path: '/ad/:id',

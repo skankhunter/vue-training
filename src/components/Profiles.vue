@@ -47,7 +47,6 @@
         methods: {
             closeDialog() {
                 this.dialog = false;
-                this.currentProfile = null;
             }
         }
     }

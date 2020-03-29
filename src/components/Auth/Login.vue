@@ -81,7 +81,7 @@
 
                     this.$store.dispatch('loginUser', user)
                         .then(() => {
-                            this.$router.push('/')
+                            this.$router.push('/profiles')
                         })
                         .catch(() => {})
                 }

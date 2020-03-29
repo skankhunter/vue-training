@@ -8,7 +8,7 @@
             <v-layout>
                 <v-flex xs6 class="text-center pt-5">
                     <h1 class="text--secondary mb-3">Profile</h1>
-                    <v-text-field label="Name"
+                    <v-text-field label="Full name"
                                   name="name"
                                   type="text"
                                   :disabled="viewMode"

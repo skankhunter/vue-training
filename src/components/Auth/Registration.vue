@@ -26,7 +26,7 @@
                                     :rules="emailRules"
                                     v-model="email"/>
                             <v-text-field
-                                    label="Name"
+                                    label="Full name"
                                     name="name"
                                     prepend-icon="mdi-baby-face"
                                     type="text"
@@ -82,16 +82,33 @@
                 v => !!v || 'Name is required',
                 v => (v && v.length <= 30) || 'Name is too long',
             ],
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-            ],
             passwordRules: [
                 v => !!v || 'Password is required',
                 v => (v && v.length >= 6) || 'Password should be 6 or more chars',
             ],
         }),
         computed: {
+            emailRules() {
+                const rules = [];
+                const domain = this.email.split('@')[1];
+
+                if (!this.email) {
+                    const rule = v => !!v || 'E-mail is required';
+                    rules.push(rule)
+                }
+
+                if (!/.+@.+\..+/.test(this.email)) {
+                    const rule = 'E-mail must be valid';
+                    rules.push(rule)
+                }
+
+                if (domain !== 'smartbics.com') {
+                    const rule = 'E-mail should have @smartbics.com domain';
+                    rules.push(rule)
+                }
+
+                return rules
+            },
             confirmPasswordRules() {
                 const rules = [];
 

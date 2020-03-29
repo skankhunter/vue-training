@@ -36,7 +36,7 @@
                 <v-app-bar-nav-icon @click="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
 
                 <v-toolbar-title>
-                    <router-link to="/" tag="span" class="pointer">Keker</router-link>
+                    <router-link to="/" tag="span" class="pointer">Smartbics</router-link>
                 </v-toolbar-title>
 
                 <v-spacer></v-spacer>
@@ -101,8 +101,8 @@
                     return [
                         {title: 'Profiles', icon: 'bookmark-multiple', url: '/profiles'},
                         // {title: 'Orders', icon: 'bookmark-multiple', url: '/orders'},
-                        {title: 'New ad', icon: 'note-text', url: '/new'},
-                        {title: 'My ads', icon: 'clipboard-list-outline', url: '/list'},
+                        // {title: 'New ad', icon: 'note-text', url: '/new'},
+                        // {title: 'My ads', icon: 'clipboard-list-outline', url: '/list'},
                         {title: 'Profile', icon: 'account-circle-outline', url: '/profile'}
                     ];
                 }
